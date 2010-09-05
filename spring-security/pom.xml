@@ -7,45 +7,17 @@
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.ckl.ckl-lib</groupId>
-	<artifactId>ckl-lib-spring</artifactId>
-	<name>ckl-lib-spring</name>
+	<artifactId>ckl-lib-spring-security</artifactId>
+	<name>ckl-lib-spring-security</name>
 	<version>0.1-SNAPSHOT</version>
 	<profiles>
 	</profiles>
 	<url>wap.ecw.de</url>
 	<dependencies>
 		<dependency>
-			<groupId>org.springmodules</groupId>
-			<artifactId>spring-modules-validation-base</artifactId>
-			<version>0.10-SNAPSHOT</version>
-			<type>jar</type>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-orm</artifactId>
-			<version>3.0.3.RELEASE</version>
-			<type>jar</type>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>commons-lang</groupId>
-			<artifactId>commons-lang</artifactId>
-			<version>2.5</version>
-			<type>jar</type>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
 			<version>3.0.3.RELEASE</version>
-			<type>jar</type>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>spring</groupId>
-			<artifactId>jakarta-commons</artifactId>
-			<version>0.9</version>
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
@@ -84,6 +56,41 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+			<version>3.0.3.RELEASE</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-acl</artifactId>
+			<version>3.0.3.RELEASE</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+			<version>3.0.3.RELEASE</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-taglibs</artifactId>
+			<version>3.0.3.RELEASE</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>taglibs</groupId>
+			<artifactId>standard</artifactId>
+			<version>1.1.2</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>
 			<version>3.0.3.RELEASE</version>
@@ -91,15 +98,8 @@
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>javax</groupId>
-			<artifactId>persistence</artifactId>
-			<version>2.0.0</version>
-			<type>jar</type>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring-core</artifactId>
+			<artifactId>spring-expression</artifactId>
 			<version>3.0.3.RELEASE</version>
 			<type>jar</type>
 			<scope>compile</scope>
@@ -108,20 +108,6 @@
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
 			<version>2.5</version>
-			<type>jar</type>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-mapper-lgpl</artifactId>
-			<version>1.5.4</version>
-			<type>jar</type>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-core-asl</artifactId>
-			<version>1.5.4</version>
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>

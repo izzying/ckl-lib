@@ -4,7 +4,7 @@
 	<groupId>de.ckl</groupId>
 	<artifactId>ckl-lib</artifactId>
 	<name>ckl-lib</name>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<url>wap.ecw.de</url>
 	<profiles>
@@ -13,5 +13,7 @@
 		<module>testing</module>
 		<module>spring</module>
 		<module>testing-jpa</module>
+		<module>twitter4j</module>
+		<module>spring-security</module>
 	</modules>
 </project>

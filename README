@@ -1,3 +1,5 @@
-Directory /spring contains helper classes for Spring, Spring Security
+Directory /spring contains helper classes for Spring
+Directory /spring-security contains helper classes for Spring Security
 Directory /testing contains a framework for creating object with random values
 Directory /testing-jpa enables automatic testing of JPA entities with /testing framework
+Directory /twitter4j enables bean configuration for twitter4j

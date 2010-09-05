@@ -2,13 +2,13 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.ckl.ckl-lib</groupId>
-	<artifactId>testing-jpa</artifactId>
+	<artifactId>ckl-lib-testing-jpa</artifactId>
 	<name>ckl-lib-testing-jpa</name>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.1-SNAPSHOT</version>
 	<parent>
 		<groupId>de.ckl</groupId>
 		<artifactId>ckl-lib</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>0.1-SNAPSHOT</version>
 	</parent>
 	<profiles>
 	</profiles>
@@ -16,13 +16,13 @@
 	<dependencies>
 		<dependency>
 			<groupId>de.ckl.ckl-lib</groupId>
-			<artifactId>testing</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<artifactId>ckl-lib-testing</artifactId>
+			<version>0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>de.ckl.ckl-lib</groupId>
-			<artifactId>spring</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<artifactId>ckl-lib-spring</artifactId>
+			<version>0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
