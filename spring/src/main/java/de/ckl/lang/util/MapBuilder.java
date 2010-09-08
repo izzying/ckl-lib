@@ -8,11 +8,11 @@ import java.util.Map;
  * 
  * @author ckl
  * @param <K>
- * @param <V>
+ * @param <Object>
  */
-public class MapBuilder<K, V>
+public class MapBuilder<K>
 {
-	private Map<K, V> map = new HashMap<K, V>();
+	private Map<K, Object> map = new HashMap<K, Object>();
 
 	/**
 	 * Uses a {@link HashMap} as internal {@link #map}
@@ -26,61 +26,61 @@ public class MapBuilder<K, V>
 	 * 
 	 * @param _mapInstance
 	 */
-	public MapBuilder(Map<K, V> _mapInstance)
+	public MapBuilder(Map<K, Object> _mapInstance)
 	{
 		map = _mapInstance;
 	}
 
 	/**
 	 * Sets _mapInstance as internal {@link #map} and
-	 * {@link #add(Object, Object)} the values
+	 * {@link #add(Object, Object)} the Objectalues
 	 * 
 	 * @param _mapInstance
 	 * @param _key
-	 * @param _value
+	 * @param _Objectalue
 	 */
-	public MapBuilder(Map<K, V> _mapInstance, K _key, V _value)
+	public MapBuilder(Map<K, Object> _mapInstance, K _key, Object _Objectalue)
 	{
 		map = _mapInstance;
-		add(_key, _value);
+		add(_key, _Objectalue);
 	}
 
 	/**
-	 * Uses a {@link HashMap} as internal {@link #map} and pushes given values
-	 * to {@link #map}
+	 * Uses a {@link HashMap} as internal {@link #map} and pushes giObjecten
+	 * Objectalues to {@link #map}
 	 * 
 	 * @param _key
-	 * @param _value
+	 * @param _Objectalue
 	 */
-	public MapBuilder(K _key, V _value)
+	public MapBuilder(K _key, Object _Objectalue)
 	{
-		add(_key, _value);
+		add(_key, _Objectalue);
 	}
 
 	/**
 	 * Return a new {@link MapBuilder} instance
 	 * 
 	 * @param <K>
-	 * @param <V>
+	 * @param <Object>
 	 * @param _key
-	 * @param _v
+	 * @param _Object
 	 * @return
 	 */
-	public static <K, V> MapBuilder<K, V> newInstance(K _key, V _v)
+	public static <K> MapBuilder<K> newInstance(K _key, Object _Object)
 	{
-		return new MapBuilder<K, V>().add(_key, _v);
+		return new MapBuilder<K>().add(_key, _Object);
 	}
 
 	/**
-	 * Add _key and value to {@link #map}
+	 * Add _key and Objectalue to {@link #map}
 	 * 
 	 * @param _key
-	 * @param _value
+	 * @param _Objectalue
 	 * @return
 	 */
-	public MapBuilder<K, V> add(K _key, V _value)
+	public MapBuilder<K> add(K _key, Object _Objectalue)
 	{
-		map.put(_key, _value);
+		map.put(_key, _Objectalue);
 
 		return this;
 	}
@@ -90,7 +90,7 @@ public class MapBuilder<K, V>
 	 * 
 	 * @return
 	 */
-	public Map<K, V> map()
+	public Map<K, Object> map()
 	{
 		return map;
 	}
