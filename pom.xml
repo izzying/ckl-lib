@@ -16,6 +16,7 @@
 		<module>twitter4j</module>
 		<module>spring-security</module>
 		<module>report</module>
-		<module>report-spring-web</module>
+		<module>report-birt</module>
+		<module>report-birt-spring-web</module>
 	</modules>
 </project>
