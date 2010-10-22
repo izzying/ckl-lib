@@ -15,5 +15,7 @@
 		<module>testing-jpa</module>
 		<module>twitter4j</module>
 		<module>spring-security</module>
+		<module>report</module>
+		<module>report-spring-web</module>
 	</modules>
 </project>
