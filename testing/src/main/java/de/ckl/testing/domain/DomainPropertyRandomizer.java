@@ -1,6 +1,7 @@
 package de.ckl.testing.domain;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,8 +19,7 @@ import org.apache.log4j.Logger;
  * 
  * @param <E>
  */
-public class DomainPropertyRandomizer<E>
-{
+public class DomainPropertyRandomizer<E> {
 	Logger log = Logger.getLogger(DomainPropertyRandomizer.class);
 
 	private HashMap<String, Object> mapOptions = new HashMap<String, Object>();
@@ -37,8 +37,7 @@ public class DomainPropertyRandomizer<E>
 	 *            generation delegator
 	 */
 	public DomainPropertyRandomizer(Class<E> _class,
-			DataGenerationDelegator<E> _dataGenerationDelegator)
-	{
+			DataGenerationDelegator<E> _dataGenerationDelegator) {
 		setAssignedClass(_class);
 		setDataGenerationDelegator(_dataGenerationDelegator);
 	}
@@ -50,15 +49,13 @@ public class DomainPropertyRandomizer<E>
 	 * @param _count
 	 * @return
 	 */
-	public List<E> factory(int _count)
-	{
+	public List<E> factory(int _count) {
 		List<E> r = new ArrayList<E>();
 
 		log.info("Creating [" + _count + "] new instances of class ["
 				+ getAssignedClass().getName() + "]");
 
-		for (int i = 0; i < _count; i++)
-		{
+		for (int i = 0; i < _count; i++) {
 			r.add(factory());
 		}
 
@@ -72,16 +69,12 @@ public class DomainPropertyRandomizer<E>
 	 * 
 	 * @return
 	 */
-	public E factory()
-	{
+	public E factory() {
 		E instance = null;
 
-		try
-		{
+		try {
 			instance = getAssignedClass().newInstance();
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			throw new InvalidParameterException(
 					"Could not instantiate new object of class ["
 							+ getAssignedClass().getName()
@@ -98,12 +91,10 @@ public class DomainPropertyRandomizer<E>
 	 * @param _clazz
 	 * @return
 	 */
-	public E update(E instance)
-	{
+	public E update(E instance) {
 		Field[] fields = instance.getClass().getDeclaredFields();
 
-		for (Field field : fields)
-		{
+		for (Field field : fields) {
 			handleField(field, instance);
 		}
 
@@ -113,6 +104,7 @@ public class DomainPropertyRandomizer<E>
 	/**
 	 * Won't handle the field if
 	 * <ul>
+	 * <li>field is static and/or final</li>
 	 * <li>annotation {@link Id} is available</li>
 	 * <li>annotation {@link Transient} is available</li>
 	 * </ul>
@@ -127,53 +119,49 @@ public class DomainPropertyRandomizer<E>
 	 * @param instance
 	 *            instance which contains the field to update
 	 */
-	protected void handleField(Field field, E instance)
-	{
+	protected void handleField(Field field, E instance) {
 		String fieldName = field.getName();
 		Object valueToSet = null;
 
-		if (field.isAnnotationPresent(Id.class))
-		{
+		int modifieres = field.getModifiers();
+
+		if (Modifier.isFinal(modifieres) || Modifier.isStatic(modifieres)) {
+			log.info("Not creating data for field [" + fieldName
+					+ "] because it is final/static");
+			return;
+		}
+		
+		if (field.isAnnotationPresent(Id.class)) {
 			log.info("Not creating data for field [" + fieldName
 					+ "] because it is annotated by @Id");
 			return;
 		}
 
-		if (field.isAnnotationPresent(Transient.class))
-		{
+		if (field.isAnnotationPresent(Transient.class)) {
 			log.info("Not creating data for field [" + fieldName
 					+ "] because it is annotated by @Transient");
 			return;
 		}
 
-		if (getDefaultValuesByFieldName().containsKey(fieldName))
-		{
+		if (getDefaultValuesByFieldName().containsKey(fieldName)) {
 			valueToSet = getDefaultValuesByFieldName().get(fieldName);
 			log.info("Field [" + fieldName + "] has registered default value ["
 					+ valueToSet + "]");
-		}
-		else
-		{
+		} else {
 			FieldCreationEnvironment fce = new FieldCreationEnvironment(field,
 					null, mapOptions, 0, 0);
 			valueToSet = getDataGenerationDelegator().generate(fce);
 		}
 
-		if (valueToSet == null)
-		{
+		if (valueToSet == null) {
 			log.warn("Value for [" + fieldName + "] is null");
-		}
-		else
-		{
-			try
-			{
+		} else {
+			try {
 				boolean access = field.isAccessible();
 				field.setAccessible(true);
 				field.set(instance, valueToSet);
 				field.setAccessible(access);
-			}
-			catch (Exception e)
-			{
+			} catch (Exception e) {
 				log.error("Failed to set value for field [" + fieldName + "]",
 						e);
 			}
@@ -186,8 +174,7 @@ public class DomainPropertyRandomizer<E>
 	 * @param defaultValuesByFieldName
 	 */
 	public void setDefaultValuesByFieldName(
-			HashMap<String, Object> defaultValuesByFieldName)
-	{
+			HashMap<String, Object> defaultValuesByFieldName) {
 		this.defaultValuesByFieldName = defaultValuesByFieldName;
 	}
 
@@ -196,8 +183,7 @@ public class DomainPropertyRandomizer<E>
 	 * 
 	 * @return
 	 */
-	public HashMap<String, Object> getDefaultValuesByFieldName()
-	{
+	public HashMap<String, Object> getDefaultValuesByFieldName() {
 		return defaultValuesByFieldName;
 	}
 
@@ -207,8 +193,7 @@ public class DomainPropertyRandomizer<E>
 	 * @param dataGenerationDelegator
 	 */
 	public void setDataGenerationDelegator(
-			DataGenerationDelegator<E> dataGenerationDelegator)
-	{
+			DataGenerationDelegator<E> dataGenerationDelegator) {
 		this.dataGenerationDelegator = dataGenerationDelegator;
 	}
 
@@ -217,8 +202,7 @@ public class DomainPropertyRandomizer<E>
 	 * 
 	 * @return
 	 */
-	public DataGenerationDelegator<E> getDataGenerationDelegator()
-	{
+	public DataGenerationDelegator<E> getDataGenerationDelegator() {
 		return dataGenerationDelegator;
 	}
 
@@ -228,8 +212,7 @@ public class DomainPropertyRandomizer<E>
 	 * @param assignedClass
 	 *            Class for which random data has to be generated
 	 */
-	public void setAssignedClass(Class<E> assignedClass)
-	{
+	public void setAssignedClass(Class<E> assignedClass) {
 		this.assignedClass = assignedClass;
 	}
 
@@ -238,8 +221,7 @@ public class DomainPropertyRandomizer<E>
 	 * 
 	 * @return
 	 */
-	public Class<E> getAssignedClass()
-	{
+	public Class<E> getAssignedClass() {
 		return assignedClass;
 	}
 }
