@@ -1,6 +1,14 @@
 .classpath
 .project
 .settings/*
+report/.settings/*
+report-birt/.settings/*
+report-birt-spring-web/.settings/*
+spring/.settings/*
+spring-security/.settings/*
+testing/.settings/*
+testing-jpa/.settings/*
+twitter4j/.settings/*
 bin/
 *.class
 */target/**

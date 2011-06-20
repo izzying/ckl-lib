@@ -29,7 +29,7 @@ public class GenericJpaDaoTemplate<Domain>
 
 	protected QueryHelper queryHelper;
 
-	@PersistenceContext(type = PersistenceContextType.TRANSACTION)
+	@PersistenceContext
 	public void setEntityManager(EntityManager _em)
 	{
 		em = _em;
@@ -54,7 +54,6 @@ public class GenericJpaDaoTemplate<Domain>
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	@Transactional
 	public List<Domain> find(String _s)
 	{
 		return getQueryHelper().createQuery(_s).getResultList();
@@ -69,7 +68,6 @@ public class GenericJpaDaoTemplate<Domain>
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	@Transactional
 	public List<Domain> find(String _s, Object... values)
 	{
 		return getQueryHelper().createQueryByIndex(_s, values).getResultList();
@@ -80,7 +78,6 @@ public class GenericJpaDaoTemplate<Domain>
 	 * loaded from database, null will be returned.
 	 */
 	@SuppressWarnings("unchecked")
-	@Transactional
 	public Domain findOne(Query query)
 	{
 		Object r = query.getSingleResult();
@@ -100,7 +97,6 @@ public class GenericJpaDaoTemplate<Domain>
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	@Transactional
 	public List<Domain> find(Query query)
 	{
 		return query.getResultList();
@@ -113,7 +109,6 @@ public class GenericJpaDaoTemplate<Domain>
 	 * @param id
 	 * @return
 	 */
-	@Transactional
 	public Domain find(Class<Domain> entityClass, Object id)
 	{
 		return getEntityManager().find(entityClass, id);
@@ -127,7 +122,6 @@ public class GenericJpaDaoTemplate<Domain>
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	@Transactional
 	public Domain findOne(String _s, Object... values)
 	{
 		Object r = null;
@@ -151,7 +145,6 @@ public class GenericJpaDaoTemplate<Domain>
 	 * @param query
 	 * @return
 	 */
-	@Transactional
 	public long count(Query query)
 	{
 		Long r = (Long) query.getSingleResult();
@@ -166,7 +159,6 @@ public class GenericJpaDaoTemplate<Domain>
 	 * @param query
 	 * @return
 	 */
-	@Transactional
 	public boolean hasMoreThanNullResults(Query query)
 	{
 		long r = count(query);
