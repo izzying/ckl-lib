@@ -13,8 +13,10 @@ import javax.persistence.Table;
 import org.junit.Test;
 
 import de.ckl.springframework.orm.jpa.GenericCrudJpaDao;
-import de.ckl.testing.domain.DomainPropertyRandomizer;
-import de.ckl.testing.domain.DomainPropertyRandomizerTemplate;
+import de.ckl.testing.ObjectRandomizer;
+import de.ckl.testing.ObjectRandomizerTemplate;
+import de.ckl.testing.handler.jpa.DenySpecialJpaAnnotatedFields;
+import de.ckl.testing.handler.jpa.StringLengthHandler;
 
 /**
  * Generic template for testing entity which are persisted by
@@ -24,31 +26,33 @@ import de.ckl.testing.domain.DomainPropertyRandomizerTemplate;
  * 
  * @param <E>
  */
-public class GenericCrudJpaDaoTestTemplate<E>
-{
+public class GenericCrudJpaDaoTestTemplate<E> {
 	private GenericCrudJpaDao<E> dao;
 
-	private DomainPropertyRandomizer<E> domainPropertyRandomizer;
+	private ObjectRandomizer<E> objectRandomizer;
 
 	private IdResolver idResolver = new ReflectionIdResolver();
 
-	public GenericCrudJpaDaoTestTemplate(GenericCrudJpaDao<E> _dao)
-	{
-		setDao(_dao);
-
-		domainPropertyRandomizer = new DomainPropertyRandomizerTemplate(dao
-				.factory().getClass());
+	public GenericCrudJpaDaoTestTemplate(GenericCrudJpaDao<E> _dao) {
+		init(_dao);
 	}
 
 	public GenericCrudJpaDaoTestTemplate(GenericCrudJpaDao<E> _dao,
-			IdResolver _idResolver)
-	{
+			IdResolver _idResolver) {
+		init(_dao);
+		idResolver = _idResolver;
+	}
+
+	private void init(GenericCrudJpaDao<E> _dao) {
 		setDao(_dao);
 
-		domainPropertyRandomizer = new DomainPropertyRandomizerTemplate(dao
-				.factory().getClass());
+		objectRandomizer = new ObjectRandomizerTemplate(dao.factory()
+				.getClass());
 
-		idResolver = _idResolver;
+		// register additional field handlers
+		objectRandomizer.getFieldHandlers().add(
+				new DenySpecialJpaAnnotatedFields());
+		objectRandomizer.getFieldHandlers().add(new StringLengthHandler());
 	}
 
 	/**
@@ -58,30 +62,25 @@ public class GenericCrudJpaDaoTestTemplate<E>
 	 * @return
 	 * @throws InvalidParameterException
 	 */
-	public String getEntityTable(E _instance) throws InvalidParameterException
-	{
+	public String getEntityTable(E _instance) throws InvalidParameterException {
 		String entityName = null;
 		String tableName = null;
 
-		if (_instance.getClass().isAnnotationPresent(Entity.class))
-		{
+		if (_instance.getClass().isAnnotationPresent(Entity.class)) {
 			entityName = _instance.getClass().getAnnotation(Entity.class)
 					.name();
 		}
 
-		if (_instance.getClass().isAnnotationPresent(Table.class))
-		{
+		if (_instance.getClass().isAnnotationPresent(Table.class)) {
 			tableName = _instance.getClass().getAnnotation(Table.class).name();
 		}
 
-		if (entityName == null && tableName == null)
-		{
+		if (entityName == null && tableName == null) {
 			throw new InvalidParameterException(
 					"Could not resolve database table name of entity. Entity must be annotated by @Table or @Entity");
 		}
 
-		if (tableName != null)
-		{
+		if (tableName != null) {
 			return tableName;
 		}
 
@@ -89,9 +88,8 @@ public class GenericCrudJpaDaoTestTemplate<E>
 	}
 
 	@Test
-	public void create()
-	{
-		E instance = getDomainPropertyRandomizer().factory();
+	public void create() {
+		E instance = getObjectRandomizer().createNewInstance();
 
 		int entriesBeforeCreating = getDao().findAll().size();
 
@@ -105,9 +103,8 @@ public class GenericCrudJpaDaoTestTemplate<E>
 	}
 
 	@Test
-	public void delete()
-	{
-		E instance = getDomainPropertyRandomizer().factory();
+	public void delete() {
+		E instance = getObjectRandomizer().createNewInstance();
 		int entriesBeforeCreating = getDao().findAll().size();
 
 		getDao().persist(instance);
@@ -118,12 +115,11 @@ public class GenericCrudJpaDaoTestTemplate<E>
 	}
 
 	@Test
-	public void findAll()
-	{
+	public void findAll() {
 		List<E> r = getDao().findAll();
 		int entriesBefore = (r == null) ? (0) : (r.size());
 
-		E instance = getDomainPropertyRandomizer().factory();
+		E instance = getObjectRandomizer().createNewInstance();
 		E persistedInstance = getDao().persist(instance);
 
 		r = getDao().findAll();
@@ -135,14 +131,13 @@ public class GenericCrudJpaDaoTestTemplate<E>
 	}
 
 	@Test
-	public void findById()
-	{
-		E instance = getDomainPropertyRandomizer().factory();
+	public void findById() {
+		E instance = getObjectRandomizer().createNewInstance();
 		E persistedEntry = getDao().persist(instance);
-		
+
 		// Execute findAll() so JPA detects changes
 		getDao().findAll();
-		
+
 		long id = idResolver.resolveId(instance);
 		assertTrue((id > 0));
 		E r = getDao().findById(id);
@@ -150,14 +145,13 @@ public class GenericCrudJpaDaoTestTemplate<E>
 	}
 
 	@Test
-	public void update()
-	{
-		E instance = getDomainPropertyRandomizer().factory();
+	public void update() {
+		E instance = getObjectRandomizer().createNewInstance();
 		E persistedEntry = getDao().persist(instance);
 
 		int entriesBeforeUpdate = getDao().findAll().size();
 
-		getDomainPropertyRandomizer().update(persistedEntry);
+		getObjectRandomizer().update(persistedEntry);
 		E updated = getDao().update(persistedEntry);
 
 		int entriesAfterUpdate = getDao().findAll().size();
@@ -166,34 +160,27 @@ public class GenericCrudJpaDaoTestTemplate<E>
 		assertEquals(persistedEntry, updated);
 	}
 
-	public void setDao(GenericCrudJpaDao<E> dao)
-	{
+	public void setDao(GenericCrudJpaDao<E> dao) {
 		this.dao = dao;
 	}
 
-	public GenericCrudJpaDao<E> getDao()
-	{
+	public GenericCrudJpaDao<E> getDao() {
 		return dao;
 	}
 
-	public void setDomainPropertyRandomizer(
-			DomainPropertyRandomizer<E> domainPropertyRandomizer)
-	{
-		this.domainPropertyRandomizer = domainPropertyRandomizer;
+	public void setObjectRandomizer(ObjectRandomizer<E> domainPropertyRandomizer) {
+		this.objectRandomizer = domainPropertyRandomizer;
 	}
 
-	public DomainPropertyRandomizer<E> getDomainPropertyRandomizer()
-	{
-		return domainPropertyRandomizer;
+	public ObjectRandomizer<E> getObjectRandomizer() {
+		return objectRandomizer;
 	}
 
-	public void setIdResolver(IdResolver idResolver)
-	{
+	public void setIdResolver(IdResolver idResolver) {
 		this.idResolver = idResolver;
 	}
 
-	public IdResolver getIdResolver()
-	{
+	public IdResolver getIdResolver() {
 		return idResolver;
 	}
 }

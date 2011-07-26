@@ -2,8 +2,22 @@ package de.ckl.springframework.orm.jpa;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
+
 public interface GenericCrudJpaDao<Domain>
 {
+	/**
+	 * Returns entity manager
+	 * 
+	 * @return
+	 */
+	public EntityManager getEntityManager();
+
+	/**
+	 * Flushes the entity cache
+	 */
+	public void flush();
+
 	/**
 	 * Creates a new domain object
 	 * 

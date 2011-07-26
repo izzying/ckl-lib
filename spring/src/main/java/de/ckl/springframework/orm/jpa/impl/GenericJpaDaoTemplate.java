@@ -195,4 +195,9 @@ public class GenericJpaDaoTemplate<Domain>
 	{
 		return jpaTemplate;
 	}
+	
+	public void flush()
+	{
+		getEntityManager().flush();
+	}
 }

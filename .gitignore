@@ -4,6 +4,7 @@
 report/.settings/*
 report-birt/.settings/*
 report-birt-spring-web/.settings/*
+testing-springmodules/.settings/*
 spring/.settings/*
 spring-security/.settings/*
 testing/.settings/*
