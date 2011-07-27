@@ -9,6 +9,7 @@ spring/.settings/*
 spring-security/.settings/*
 testing/.settings/*
 testing-jpa/.settings/*
+testing-validation/.settings/*
 twitter4j/.settings/*
 bin/
 *.class
