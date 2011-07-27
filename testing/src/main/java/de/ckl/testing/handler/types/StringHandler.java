@@ -8,14 +8,14 @@ import de.ckl.testing.handler.FieldHandlerAdapter;
 import de.ckl.testing.handler.annotation.CreatesUniqueValues;
 
 /**
- * Creates a random string.
+ * Creates a random string. Maximum string length is 20 by default.
  * 
  * @author ckl
  */
 @CreatesUniqueValues
 public class StringHandler extends FieldHandlerAdapter {
 	private long minLength = 0;
-	private long maxLength = 1000;
+	private long maxLength = 20;
 
 	public boolean supports(Field _field) {
 		return _field.getType().isAssignableFrom(String.class);
@@ -27,6 +27,7 @@ public class StringHandler extends FieldHandlerAdapter {
 
 	@Override
 	public Object createValue(Field _field) {
+		// TODO Secure?
 		long length = getMinLength()
 				+ (long) (Math.random() * (getMaxLength() - getMinLength()) + 0.5);
 

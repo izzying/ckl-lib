@@ -2,6 +2,18 @@ package de.ckl.testing.handler;
 
 import java.lang.reflect.Field;
 
+/**
+ * Adapter class for the most field handlers which will be wirtten Returns in
+ * this implementation:
+ * <ul>
+ * <li> {@link #getVeto(Field)}: {@link Veto#NO_VETO}</li>
+ * <li> {@link #getPriority()}: {@link IFieldHandler#PRIORITY_NORMAL}</li>
+ * <li> {@link #supports(Field)}: false</li>
+ * </ul>
+ * 
+ * @author ckl
+ * 
+ */
 public class FieldHandlerAdapter extends CloneableFieldHandler implements
 		IFieldHandler {
 	@Override

@@ -4,6 +4,12 @@ import java.lang.reflect.Field;
 
 import de.ckl.testing.handler.annotation.CreatesUniqueValues;
 
+/**
+ * Creates a new long, supports long and {@link Long}
+ * 
+ * @author ckl
+ * 
+ */
 @CreatesUniqueValues
 public class LongHandler extends IntegerHandler {
 	@Override

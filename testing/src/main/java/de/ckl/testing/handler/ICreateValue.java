@@ -5,7 +5,7 @@ import java.lang.reflect.Field;
 public interface ICreateValue {
 
 	/**
-	 * Create a new value for field
+	 * Creates a new value for give field
 	 * 
 	 * @param _field
 	 * @return

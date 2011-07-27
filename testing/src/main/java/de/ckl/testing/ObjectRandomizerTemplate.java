@@ -7,14 +7,22 @@ import de.ckl.testing.handler.types.LongHandler;
 import de.ckl.testing.handler.types.StringHandler;
 
 /**
- * Template class with registered default handlers
+ * Template class with registered default handlers {@link DenyFinalStaticFields}
+ * , {@link StringHandler}, {@link IntegerHandler}, {@link LongHandler},
+ * {@link DateHandler}
  * 
  * @author ckl
  * 
  * @param <E>
  */
 public class ObjectRandomizerTemplate<E> extends ObjectRandomizer<E> {
-	public static <E> ObjectRandomizer<E> getInstance(Class<E> _e) {
+	/**
+	 * Creates a new instance
+	 * 
+	 * @param _e
+	 * @return
+	 */
+	public static <E> ObjectRandomizer<E> newInstance(Class<E> _e) {
 		return new ObjectRandomizerTemplate<E>(_e);
 	}
 

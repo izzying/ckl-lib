@@ -5,6 +5,12 @@ import java.lang.reflect.Field;
 import de.ckl.testing.handler.FieldHandlerAdapter;
 import de.ckl.testing.handler.annotation.CreatesUniqueValues;
 
+/**
+ * Creates a new integer value. Supports int and {@link Integer}
+ * 
+ * @author ckl
+ * 
+ */
 @CreatesUniqueValues
 public class IntegerHandler extends FieldHandlerAdapter {
 	private int minNumber = Integer.MIN_VALUE;

@@ -16,11 +16,22 @@ import de.ckl.testing.handler.CloneableFieldHandler;
 import de.ckl.testing.handler.IFieldHandler;
 import de.ckl.testing.handler.IFieldHandler.Veto;
 
+/**
+ * {@link ObjectRandomizer} is the main factory for creating and updating test
+ * data for objects of given type.
+ * 
+ * @author ckl
+ * 
+ * @param <E>
+ */
 public class ObjectRandomizer<E> {
 	Logger log = Logger.getLogger(ObjectRandomizer.class);
 
 	private boolean isInitialized = false;
 
+	/**
+	 * Reference to class for objects under test
+	 */
 	private Class<E> assignedClass;
 
 	private List<IFieldHandler> fieldHandlers = new ArrayList<IFieldHandler>();
@@ -33,6 +44,12 @@ public class ObjectRandomizer<E> {
 		setAssignedClass(_class);
 	}
 
+	/**
+	 * Comparator for priority ordering
+	 * 
+	 * @author ckl
+	 * 
+	 */
 	public class FieldHandlerComparatorByPriority implements
 			Comparator<IFieldHandler> {
 		@Override
@@ -41,6 +58,11 @@ public class ObjectRandomizer<E> {
 		}
 	}
 
+	/**
+	 * Initalizes the assigned field handler for class under test.
+	 * 
+	 * @return
+	 */
 	public Map<String, List<IFieldHandler>> init() {
 		if (!isInitialized) {
 			Field[] fields = getAssignedClass().getDeclaredFields();
@@ -52,30 +74,31 @@ public class ObjectRandomizer<E> {
 			for (Field field : fields) {
 				log.info("  Initalizing field handlers for field "
 						+ field.getName());
+				// remove unsupported or denied handlers
 				List<IFieldHandler> fieldHandlersForField = filterAvailableHandlers(
 						field, getFieldHandlers());
 
 				log.info("    " + fieldHandlersForField.size()
 						+ " field handler(s) available");
 
+				// ignore empty set
 				if (fieldHandlersForField.size() == 0) {
 					continue;
 				}
 
-				// if field can be modified by one or more handlers. Sort
-				// handlers
-				// by priority and remove items after SKIP_FOLLOWING
+				// field can be modified by one or more handlers.
+				// Sort handlers by priority and remove all items after
+				// SKIP_FOLLOWING (if exists)
 				Collections.sort(fieldHandlersForField, createComparator());
 
 				fieldHandlersForField = filterHandlersAfterSkipFollowing(field,
 						fieldHandlersForField);
 
 				// Reorder entites, so high priority is last and can overwrite
-				// ever
-				// other value
+				// ever other value
 				Collections.reverse(fieldHandlersForField);
 
-				// register final field handlers
+				// register all valid field handlers
 				assignedFieldHandlers.put(field.getName(),
 						fieldHandlersForField);
 			}
@@ -94,6 +117,11 @@ public class ObjectRandomizer<E> {
 		init();
 	}
 
+	/**
+	 * Returns a new comparator instance
+	 * 
+	 * @return
+	 */
 	public Comparator<IFieldHandler> createComparator() {
 		return new FieldHandlerComparatorByPriority();
 	}
@@ -260,6 +288,12 @@ public class ObjectRandomizer<E> {
 		return instance;
 	}
 
+	/**
+	 * Internal method for update a given field of a given instance
+	 * 
+	 * @param field
+	 * @param instance
+	 */
 	protected void handleField(Field field, E instance) {
 		String fieldName = field.getName();
 
@@ -269,15 +303,20 @@ public class ObjectRandomizer<E> {
 			return;
 		}
 
+		// find available field handlers
 		List<IFieldHandler> availableFieldHandlers = assignedFieldHandlers
 				.get(fieldName);
 		log.debug("Field handlers for field " + fieldName + ": "
 				+ availableFieldHandlers.size());
 
+		// make field accessible
 		boolean access = field.isAccessible();
 		field.setAccessible(true);
 
+		// iterate over every field handler
 		for (IFieldHandler fieldHandler : availableFieldHandlers) {
+			
+			// generate random data
 			Object valueToSet = dataGeneratorStrategy.generate(field,
 					fieldHandler);
 
@@ -292,6 +331,8 @@ public class ObjectRandomizer<E> {
 				}
 			}
 		}
+		
+		// set access level back to original value
 		field.setAccessible(access);
 	}
 

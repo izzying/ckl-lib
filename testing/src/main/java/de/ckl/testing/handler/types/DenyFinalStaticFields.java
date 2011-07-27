@@ -6,8 +6,6 @@ import java.lang.reflect.Modifier;
 import org.apache.log4j.Logger;
 
 import de.ckl.testing.handler.FieldHandlerAdapter;
-import de.ckl.testing.handler.IFieldHandler;
-import de.ckl.testing.handler.IFieldHandler.Veto;
 
 /**
  * Protect all final or static fields

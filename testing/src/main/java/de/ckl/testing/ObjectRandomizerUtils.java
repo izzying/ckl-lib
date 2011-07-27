@@ -14,6 +14,9 @@ import de.ckl.testing.registry.ObjectRandomizerRegistry;
 public class ObjectRandomizerUtils {
 	private ObjectRandomizerRegistry objectRandomizerRegistry = new ObjectRandomizerRegistry();
 
+	/**
+	 * Singleton
+	 */
 	private ObjectRandomizerUtils() {
 	}
 

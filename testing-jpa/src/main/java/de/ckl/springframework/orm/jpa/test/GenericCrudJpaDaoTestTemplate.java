@@ -15,8 +15,8 @@ import org.junit.Test;
 import de.ckl.springframework.orm.jpa.GenericCrudJpaDao;
 import de.ckl.testing.ObjectRandomizer;
 import de.ckl.testing.ObjectRandomizerTemplate;
-import de.ckl.testing.handler.jpa.DenySpecialJpaAnnotatedFields;
-import de.ckl.testing.handler.jpa.StringLengthHandler;
+import de.ckl.testing.jpa.handler.types.DenySpecialJpaAnnotatedFields;
+import de.ckl.testing.jpa.handler.types.StringLengthHandler;
 
 /**
  * Generic template for testing entity which are persisted by
