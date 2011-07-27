@@ -1,5 +1,8 @@
-Directory /spring contains helper classes for Spring
+Directory /report* embedding BIRT into Spring
+Directory /spring contains several helper classes for Spring
 Directory /spring-security contains helper classes for Spring Security
 Directory /testing contains a framework for creating object with random values
-Directory /testing-jpa enables automatic testing of JPA entities with /testing framework
+Directory /testing-jpa enables generation of data for JPA annotated field and entities with /testing framework
+Directory /testing-springmodules enables generation of data for objects which use Springmodules annotation
+Directory /testing-validation enables generation of data for fields which are annotated by javax.annotation 
 Directory /twitter4j enables bean configuration for twitter4j
