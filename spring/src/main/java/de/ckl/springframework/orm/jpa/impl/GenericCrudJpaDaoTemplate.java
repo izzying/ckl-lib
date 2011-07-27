@@ -53,7 +53,7 @@ abstract public class GenericCrudJpaDaoTemplate<Domain> extends
 
 	public void delete(Domain domain)
 	{
-		domain = getEntityManager().merge(domain);
+	//	domain = getEntityManager().merge(domain);
 		getEntityManager().remove(domain);
 		domain = null;
 	}

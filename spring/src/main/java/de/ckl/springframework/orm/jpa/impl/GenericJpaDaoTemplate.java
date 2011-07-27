@@ -4,13 +4,12 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceContextType;
 import javax.persistence.Query;
 
 import org.springframework.orm.jpa.JpaTemplate;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
+import de.ckl.springframework.orm.jpa.support.EntityPagination;
 import de.ckl.springframework.orm.jpa.support.QueryHelper;
 
 /**
@@ -21,20 +20,21 @@ import de.ckl.springframework.orm.jpa.support.QueryHelper;
  * @param <Domain>
  */
 @Repository
-public class GenericJpaDaoTemplate<Domain>
-{
+public class GenericJpaDaoTemplate<Domain> {
 	private EntityManager em;
 
 	private JpaTemplate jpaTemplate;
 
 	protected QueryHelper queryHelper;
 
+	private EntityPagination<Domain> entityPagination;
+
 	@PersistenceContext
-	public void setEntityManager(EntityManager _em)
-	{
+	public void setEntityManager(EntityManager _em) {
 		em = _em;
 		setJpaTemplate(new JpaTemplate(em));
 		setQueryHelper(new QueryHelper(em));
+		setEntityPagination(new EntityPagination<Domain>());
 	}
 
 	/**
@@ -42,8 +42,7 @@ public class GenericJpaDaoTemplate<Domain>
 	 * 
 	 * @return
 	 */
-	public EntityManager getEntityManager()
-	{
+	public EntityManager getEntityManager() {
 		return em;
 	}
 
@@ -54,8 +53,7 @@ public class GenericJpaDaoTemplate<Domain>
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public List<Domain> find(String _s)
-	{
+	public List<Domain> find(String _s) {
 		return getQueryHelper().createQuery(_s).getResultList();
 	}
 
@@ -68,8 +66,7 @@ public class GenericJpaDaoTemplate<Domain>
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public List<Domain> find(String _s, Object... values)
-	{
+	public List<Domain> find(String _s, Object... values) {
 		return getQueryHelper().createQueryByIndex(_s, values).getResultList();
 	}
 
@@ -78,12 +75,10 @@ public class GenericJpaDaoTemplate<Domain>
 	 * loaded from database, null will be returned.
 	 */
 	@SuppressWarnings("unchecked")
-	public Domain findOne(Query query)
-	{
+	public Domain findOne(Query query) {
 		Object r = query.getSingleResult();
 
-		if (r != null)
-		{
+		if (r != null) {
 			return (Domain) r;
 		}
 
@@ -97,8 +92,7 @@ public class GenericJpaDaoTemplate<Domain>
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public List<Domain> find(Query query)
-	{
+	public List<Domain> find(Query query) {
 		return query.getResultList();
 	}
 
@@ -109,8 +103,7 @@ public class GenericJpaDaoTemplate<Domain>
 	 * @param id
 	 * @return
 	 */
-	public Domain find(Class<Domain> entityClass, Object id)
-	{
+	public Domain find(Class<Domain> entityClass, Object id) {
 		return getEntityManager().find(entityClass, id);
 	}
 
@@ -122,17 +115,13 @@ public class GenericJpaDaoTemplate<Domain>
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public Domain findOne(String _s, Object... values)
-	{
+	public Domain findOne(String _s, Object... values) {
 		Object r = null;
 
-		try
-		{
+		try {
 			r = getQueryHelper().createQueryByIndex(_s, values)
 					.getSingleResult();
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			return null;
 		}
 
@@ -145,11 +134,20 @@ public class GenericJpaDaoTemplate<Domain>
 	 * @param query
 	 * @return
 	 */
-	public long count(Query query)
-	{
+	public long count(Query query) {
 		Long r = (Long) query.getSingleResult();
 
 		return r;
+	}
+
+	/**
+	 * Returns a number of elements, defined in current context
+	 * 
+	 * @param _query
+	 * @return
+	 */
+	public List<Domain> paginate(Query _query) {
+		return getEntityPagination().getEntities(_query);
 	}
 
 	/**
@@ -159,8 +157,7 @@ public class GenericJpaDaoTemplate<Domain>
 	 * @param query
 	 * @return
 	 */
-	public boolean hasMoreThanNullResults(Query query)
-	{
+	public boolean hasMoreThanNullResults(Query query) {
 		long r = count(query);
 
 		return (r > 0);
@@ -171,8 +168,7 @@ public class GenericJpaDaoTemplate<Domain>
 	 * 
 	 * @param queryHelper
 	 */
-	public void setQueryHelper(QueryHelper queryHelper)
-	{
+	public void setQueryHelper(QueryHelper queryHelper) {
 		this.queryHelper = queryHelper;
 	}
 
@@ -181,23 +177,27 @@ public class GenericJpaDaoTemplate<Domain>
 	 * 
 	 * @return
 	 */
-	public QueryHelper getQueryHelper()
-	{
+	public QueryHelper getQueryHelper() {
 		return queryHelper;
 	}
 
-	public void setJpaTemplate(JpaTemplate jpaTemplate)
-	{
+	public void setJpaTemplate(JpaTemplate jpaTemplate) {
 		this.jpaTemplate = jpaTemplate;
 	}
 
-	public JpaTemplate getJpaTemplate()
-	{
+	public JpaTemplate getJpaTemplate() {
 		return jpaTemplate;
 	}
-	
-	public void flush()
-	{
+
+	public void flush() {
 		getEntityManager().flush();
+	}
+
+	public EntityPagination<Domain> getEntityPagination() {
+		return entityPagination;
+	}
+
+	public void setEntityPagination(EntityPagination<Domain> entityPagination) {
+		this.entityPagination = entityPagination;
 	}
 }

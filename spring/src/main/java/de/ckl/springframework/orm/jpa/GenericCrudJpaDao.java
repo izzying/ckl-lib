@@ -3,9 +3,9 @@ package de.ckl.springframework.orm.jpa;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
-public interface GenericCrudJpaDao<Domain>
-{
+public interface GenericCrudJpaDao<Domain> {
 	/**
 	 * Returns entity manager
 	 * 
@@ -78,4 +78,13 @@ public interface GenericCrudJpaDao<Domain>
 	 * @return
 	 */
 	public Domain factory();
+
+	/**
+	 * Returns a number of elements, defined in current context
+	 * 
+	 * @param _query
+	 * @return
+	 */
+	public List<Domain> paginate(Query _query);
+
 }

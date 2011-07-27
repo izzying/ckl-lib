@@ -12,14 +12,15 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
+import de.ckl.lang.util.MapBuilder;
+
 /**
  * This helper class defines a layout file which can be used for defining a
  * standard HTML layout.
  * 
  * @author ckl
  */
-public class LayoutHelper
-{
+public class LayoutHelper {
 	Logger log = Logger.getLogger(LayoutHelper.class);
 
 	/**
@@ -81,43 +82,36 @@ public class LayoutHelper
 	 */
 	public ModelAndView buildModelAndView(String _contentView,
 			Map<String, Object> _models, Object _mainModel,
-			boolean _ommitPrefix, boolean _ommitSuffix)
-	{
-		if (_models == null)
-		{
+			boolean _ommitPrefix, boolean _ommitSuffix) {
+		if (_models == null) {
 			_models = new HashMap<String, Object>();
 		}
 
-		if (!_ommitPrefix && getPrefix() != null)
-		{
+		if (!_ommitPrefix && getPrefix() != null) {
 			_contentView = getPrefix() + _contentView;
 		}
 
 		String jspFileToServe = null;
 
-		if (isAllowDisableLayoutForRequest())
-		{
+		if (isAllowDisableLayoutForRequest()) {
 			RequestAttributes requestAttributes = RequestContextHolder
 					.getRequestAttributes();
 			HttpServletRequest request = null;
 
-			if (requestAttributes instanceof ServletRequestAttributes)
-			{
+			if (requestAttributes instanceof ServletRequestAttributes) {
 				request = ((ServletRequestAttributes) requestAttributes)
 						.getRequest();
 
-				if (request.getParameter(getDisableLayoutRequestParameter()) != null)
-				{
+				if (request.getParameter(getDisableLayoutRequestParameter()) != null) {
 					jspFileToServe = _contentView;
-					log.debug("Skipping layout and serving main view [" + jspFileToServe + "]");
+					log.debug("Skipping layout and serving main view ["
+							+ jspFileToServe + "]");
 				}
 			}
 		}
 
-		if (jspFileToServe == null)
-		{
-			if (!_ommitSuffix && getSuffix() != null)
-			{
+		if (jspFileToServe == null) {
+			if (!_ommitSuffix && getSuffix() != null) {
 				_contentView += getSuffix();
 			}
 
@@ -131,8 +125,7 @@ public class LayoutHelper
 
 		if (_mainModel != null
 				&& (getXmlMarshallingModelKey() != null && getXmlMarshallingModelKey()
-						.length() > 0))
-		{
+						.length() > 0)) {
 			log.debug("Adding XML marshalling key ["
 					+ getXmlMarshallingModelKey() + "] to model [" + _mainModel
 					+ "]");
@@ -152,9 +145,13 @@ public class LayoutHelper
 	 * @param _contentView
 	 * @return
 	 */
-	public ModelAndView buildModelAndView(String _contentView)
-	{
+	public ModelAndView buildModelAndView(String _contentView) {
 		return buildModelAndView(_contentView, null, null, false, false);
+	}
+
+	public ModelAndView buildModelAndView(String _contentView,
+			MapBuilder<String> _mapBuilder) {
+		return buildModelAndView(_contentView, _mapBuilder.map());
 	}
 
 	/**
@@ -169,13 +166,11 @@ public class LayoutHelper
 	 * @return
 	 */
 	public ModelAndView buildModelAndView(String _contentView,
-			Map<String, Object> _models)
-	{
+			Map<String, Object> _models) {
 		Collection<Object> cObjects = _models.values();
 		Object[] objects = cObjects.toArray();
 
-		if (objects != null && objects.length > 0)
-		{
+		if (objects != null && objects.length > 0) {
 			return buildModelAndView(_contentView, _models, objects[0]);
 		}
 
@@ -183,81 +178,71 @@ public class LayoutHelper
 	}
 
 	public ModelAndView buildModelAndView(String _contentView,
-			Map<String, Object> _models, Object _mainModel)
-	{
+			Map<String, Object> _models, Object _mainModel) {
 		return buildModelAndView(_contentView, _models, _mainModel, false,
 				false);
 	}
 
-	public void setContentKey(String contentKey)
-	{
+	public ModelAndView buildModelAndView(String _contentView,
+			MapBuilder<String> _mapBuilder, Object _mainModel) {
+		return buildModelAndView(_contentView, _mapBuilder.map(), _mainModel);
+	}
+
+	public void setContentKey(String contentKey) {
 		this.contentKey = contentKey;
 	}
 
-	public String getContentKey()
-	{
+	public String getContentKey() {
 		return contentKey;
 	}
 
-	public void setSuffix(String suffix)
-	{
+	public void setSuffix(String suffix) {
 		this.suffix = suffix;
 	}
 
-	public String getSuffix()
-	{
+	public String getSuffix() {
 		return suffix;
 	}
 
-	public void setPrefix(String prefix)
-	{
+	public void setPrefix(String prefix) {
 		this.prefix = prefix;
 	}
 
-	public String getPrefix()
-	{
+	public String getPrefix() {
 		return prefix;
 	}
 
-	public void setLayoutView(String layoutView)
-	{
+	public void setLayoutView(String layoutView) {
 		this.layoutView = layoutView;
 	}
 
-	public String getLayoutView()
-	{
+	public String getLayoutView() {
 		return layoutView;
 	}
 
-	public void setXmlMarshallingModelKey(String xmlMarshallingModelKey)
-	{
+	public void setXmlMarshallingModelKey(String xmlMarshallingModelKey) {
 		this.xmlMarshallingModelKey = xmlMarshallingModelKey;
 	}
 
-	public String getXmlMarshallingModelKey()
-	{
+	public String getXmlMarshallingModelKey() {
 		return xmlMarshallingModelKey;
 	}
 
 	public void setAllowDisableLayoutForRequest(
-			boolean allowDisableLayoutForRequest)
-	{
+			boolean allowDisableLayoutForRequest) {
 		this.allowDisableLayoutForRequest = allowDisableLayoutForRequest;
 	}
 
-	public boolean isAllowDisableLayoutForRequest()
-	{
+	public boolean isAllowDisableLayoutForRequest() {
 		return allowDisableLayoutForRequest;
 	}
 
 	public void setDisableLayoutRequestParameter(
-			String disableLayoutRequestParameter)
-	{
+			String disableLayoutRequestParameter) {
 		this.disableLayoutRequestParameter = disableLayoutRequestParameter;
 	}
 
-	public String getDisableLayoutRequestParameter()
-	{
+	public String getDisableLayoutRequestParameter() {
 		return disableLayoutRequestParameter;
 	}
 

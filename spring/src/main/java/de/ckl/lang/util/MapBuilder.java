@@ -10,15 +10,13 @@ import java.util.Map;
  * @param <K>
  * @param <Object>
  */
-public class MapBuilder<K>
-{
+public class MapBuilder<K> {
 	private Map<K, Object> map = new HashMap<K, Object>();
 
 	/**
 	 * Uses a {@link HashMap} as internal {@link #map}
 	 */
-	public MapBuilder()
-	{
+	public MapBuilder() {
 	}
 
 	/**
@@ -26,8 +24,7 @@ public class MapBuilder<K>
 	 * 
 	 * @param _mapInstance
 	 */
-	public MapBuilder(Map<K, Object> _mapInstance)
-	{
+	public MapBuilder(Map<K, Object> _mapInstance) {
 		map = _mapInstance;
 	}
 
@@ -39,8 +36,7 @@ public class MapBuilder<K>
 	 * @param _key
 	 * @param _Objectalue
 	 */
-	public MapBuilder(Map<K, Object> _mapInstance, K _key, Object _Objectalue)
-	{
+	public MapBuilder(Map<K, Object> _mapInstance, K _key, Object _Objectalue) {
 		map = _mapInstance;
 		add(_key, _Objectalue);
 	}
@@ -52,8 +48,7 @@ public class MapBuilder<K>
 	 * @param _key
 	 * @param _Objectalue
 	 */
-	public MapBuilder(K _key, Object _Objectalue)
-	{
+	public MapBuilder(K _key, Object _Objectalue) {
 		add(_key, _Objectalue);
 	}
 
@@ -66,9 +61,17 @@ public class MapBuilder<K>
 	 * @param _Object
 	 * @return
 	 */
-	public static <K> MapBuilder<K> newInstance(K _key, Object _Object)
-	{
+	public static <K> MapBuilder<K> newInstance(K _key, Object _Object) {
 		return new MapBuilder<K>().add(_key, _Object);
+	}
+
+	/**
+	 * Return instance with key as String
+	 * 
+	 * @return
+	 */
+	public static MapBuilder<String> keyAsString() {
+		return new MapBuilder<String>();
 	}
 
 	/**
@@ -78,8 +81,7 @@ public class MapBuilder<K>
 	 * @param _Objectalue
 	 * @return
 	 */
-	public MapBuilder<K> add(K _key, Object _Objectalue)
-	{
+	public MapBuilder<K> add(K _key, Object _Objectalue) {
 		map.put(_key, _Objectalue);
 
 		return this;
@@ -90,8 +92,7 @@ public class MapBuilder<K>
 	 * 
 	 * @return
 	 */
-	public Map<K, Object> map()
-	{
+	public Map<K, Object> map() {
 		return map;
 	}
 }
